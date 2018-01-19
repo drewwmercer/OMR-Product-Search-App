@@ -1,13 +1,50 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const product = require('./products.js');
+const products = require('./products.js');
+
+class Result extends React.Component {
+
+    render() {
+
+        return(
+            <div className='in-stock'>
+                <p>I'm text</p>
+            </div>
+
+        )
+    }
+
+
+}
 
 class Results extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      foundProducts: props.products
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('Results: ' + nextProps.query);
+    console.log(nextProps.products);
+
+    const foundProducts = nextProps.products.filter(product => {
+      return (
+        product.name.toLowerCase().match(nextProps.query.toLowerCase()) ||
+        product.description.toLowerCase().match(nextProps.query.toLowerCase())
+      );
+    });
+    this.setState({ foundProducts: foundProducts });
+  }
+
   render() {
     return (
       <div className="results">
-        <div className="in-stock" />
+        {this.state.foundProducts.map((product, i) => {
+          return <Result product={product} key={i} />;
+        })}
       </div>
     );
   }
@@ -16,7 +53,7 @@ class Results extends React.Component {
 class SearchBar extends React.Component {
   handleQuery(event) {
     this.props.onQuery(event.target.value);
-    console.log('Query: ' + event.target.value);
+    // console.log('Query: ' + event.target.value);
   }
 
   render() {
@@ -37,18 +74,18 @@ class Search extends React.Component {
   }
 
   handleQuery(query) {
-    console.log('Search: ' + query);
-    // this.setState({'query': })
+    // console.log('Search: ' + query);
+    this.setState({ query: query.toLowerCase().trim() });
   }
 
   render() {
     return (
       <div className="search">
         <SearchBar onQuery={this.handleQuery.bind(this)} />
-        <Results />
+        <Results products={this.props.products} query={this.state.query} />
       </div>
     );
   }
 }
 
-ReactDOM.render(<Search />, document.getElementById('app'));
+ReactDOM.render(<Search products={products} />, document.getElementById('app'));
