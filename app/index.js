@@ -1,6 +1,10 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+const product = require('./products.js')
+
+
+
 class SearchBar extends React.Component {
   
     handleQuery(event) {
