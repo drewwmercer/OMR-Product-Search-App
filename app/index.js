@@ -4,18 +4,21 @@ const ReactDOM = require('react-dom');
 const products = require('./products.js');
 
 class Result extends React.Component {
+  displayPrice(price) {
+    return price / 100.0;
+  }
 
-    render() {
-
-        return(
-            <div className='in-stock'>
-                <p>I'm text</p>
-            </div>
-
-        )
-    }
-
-
+  render() {
+    return (
+      <div className="in-stock">
+        <h2>
+          <a href="#">{this.props.product.name}</a>
+        </h2>
+        <p>${this.displayPrice(this.props.product.price)}</p>
+        <p>{this.props.product.description}</p>
+      </div>
+    );
+  }
 }
 
 class Results extends React.Component {
